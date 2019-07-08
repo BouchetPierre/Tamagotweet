@@ -32,8 +32,6 @@ h1 {
 /*---------------end container-------------------*/
 
 .hero{
-  width: 300px;
-  height: 50px;
   color: red;
   font-size: 2em;
   text-align: center;
@@ -42,7 +40,7 @@ h1 {
 /* The Modal (background) */
 #id01 {
   display: none; /* Hidden by default */
-  /*position: fixed;*/ /* Stay in place */
+  position: fixed; /* Stay in place */
   z-index: 1; /* Sit on top */
   left: 0;
   top: 0;
@@ -55,6 +53,8 @@ h1 {
   font-size: 20px;
   text-align: center;
   vertical-align: middle;
+  margin-left: 40%;
+  margin-top: 500px;
 
 }
 
@@ -86,6 +86,7 @@ span:hover,
   height: 80px;
   width: 80px;
   margin-top: 10px;
-
-
+}
+.vomis{
+  text-align: center;
 }

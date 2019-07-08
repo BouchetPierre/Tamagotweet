@@ -64,7 +64,7 @@
 
                       $requestMethod = "GET";
 
-                      $getfield = "?screen_name=kaa_sha&count=10";
+                      $getfield = "?screen_name=kaa_sha&count=5";
 
                       $twitter = new TwitterAPIExchange($settings);
 
@@ -78,14 +78,32 @@
                           }
 
                           $i=0;
+                          $textvomis;
                           foreach($str as $items){
                                   $textTweet=$items['text'];
                                   $lesMots = explode(" ", $textTweet);
                                   if (isset($lesMots[$i])){
-                                  echo "<font class=\"vomis\" style =\"font-size:100px;\">$lesMots[$i]</font>";
+                                  echo "<font class=\"vomis\" style =\"font-size:100px; margin-left:15px; \">$lesMots[$i]</font>";
+                                  $textvomis[]=$lesMots[$i];
                                   $i++;
                                 }
-                          }
+                            }
+      /*---------tweet _du "vomis"-----------------------------*/
+                          $textvomis2=implode(" ",$textvomis);
+                          require_once('TwitterAPIExchange.php');
+                          /*authentification du compte tweeter=   token */
+                          $settings = array('oauth_access_token'=>'3238659609-6X9uGUkxpYhmqQSQqqix4Ewc2uTPdD9nskI45F8',
+                          'oauth_access_token_secret'=>'QEY4nk2YMueFDACd5nVZiqGkdT8HI5LiW4dKHoi7ZiYth',
+                          'consumer_key'=>'w3S89uW36ocTHuxTG7nfCjoVK',
+                          'consumer_secret'=>'fHcG0TZCbF8KRPl7uhyKi1lVhJxQnGm3tc3C2XcXgCVOsjbgjJ');
+                          /*construction URL pour envoi de tweet*/
+                          $url = "https://api.twitter.com/1.1/statuses/update.json";
+                          $requestMethod = "POST";
+                          $postfields = ["status"=>"$textvomis2"]; /*Ecrire un tweet*/
+                          $twitter = new TwitterAPIExchange($settings);
+                           $twitter->buildOauth($url, $requestMethod)
+                                       ->setPostfields($postfields)
+                                       ->performRequest();
 
                     }else{
                       $nbTweet=0; // On initialise a 0
@@ -144,7 +162,7 @@
         console.log (taille);
         var myImg = document.getElementById("sky");
 
-    		if(taille==750){
+    		if(taille==950){
                 myImg.style.height= 150 + "px";
                 myImg.style.width= 150 + "px";
 
@@ -164,8 +182,11 @@
         // Get the <span> element that closes the modal
         var span = document.getElementsByClassName("close")[0];
 
-        if (nbtweet ==6){
+        if (nbtweet ==5){
         modal.style.display = "block";
+        <?php
+        $message="Tu tweet trop";
+        mail('bouchet.hp@gmail.com', 'Alert Tweet',$message); ?>;
         }
         if (nbtweet==7){
           myImg.src ="images/tama_explosion.gif";
