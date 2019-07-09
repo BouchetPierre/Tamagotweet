@@ -13,7 +13,7 @@
       <div class="envoi">
         <form  class="envoiForm" method="post">
           <textarea class="envoiText" type="text" name="tweet" value="Ecrir le tweet"></textarea>
-          <input class="envoiInput"type="submit" name="compteur" value="Publier le tweets" >
+          <input id="bouton" class="envoiInput"type="submit" name="compteur" value="Publier le tweets" >
         </form>
       </div>
 <!----------------------------------------------------------------------->
@@ -35,9 +35,22 @@
 
 <!--insertion modal----------------------------------->
 <div class="hero">
-        <?php
-/*---------Sauvegarde du nombre de tweet---et fonction "vomis"-----------------------------*/
 
+
+        <?php
+/*---------fonction authentification-----------------------------*/
+function Authenti(){
+  require_once('TwitterAPIExchange.php');
+
+  return array('oauth_access_token'=>'3238659609-6X9uGUkxpYhmqQSQqqix4Ewc2uTPdD9nskI45F8',/*On retourne la réponse de l'API*/
+  'oauth_access_token_secret'=>'QEY4nk2YMueFDACd5nVZiqGkdT8HI5LiW4dKHoi7ZiYth',
+  'consumer_key'=>'w3S89uW36ocTHuxTG7nfCjoVK',
+  'consumer_secret'=>'fHcG0TZCbF8KRPl7uhyKi1lVhJxQnGm3tc3C2XcXgCVOsjbgjJ');
+
+}
+/*-----fin----fonction authentification-------------------------------*/
+
+/*---------Sauvegarde du nombre de tweet---et fonction "vomis"-----------------------------*/
 
               $nbTweet=0;
                if(!empty($_POST['compteur'])) {
@@ -53,14 +66,10 @@
                       fseek($monfichier, 0); // On remet le curseur au début du fichier
                       fputs($monfichier, $nbTweet); // On écrit le 0
                       fclose($monfichier);
-                      require_once('TwitterAPIExchange.php');
 
-                      $settings = array('oauth_access_token'=>'3238659609-6X9uGUkxpYhmqQSQqqix4Ewc2uTPdD9nskI45F8',
-                      'oauth_access_token_secret'=>'QEY4nk2YMueFDACd5nVZiqGkdT8HI5LiW4dKHoi7ZiYth',
-                      'consumer_key'=>'w3S89uW36ocTHuxTG7nfCjoVK',
-                      'consumer_secret'=>'fHcG0TZCbF8KRPl7uhyKi1lVhJxQnGm3tc3C2XcXgCVOsjbgjJ');
+                      $settings=Authenti();
 
-                      $url = "https://api.twitter.com/1.1/statuses/user_timeline.json";
+                      $url = "https://api.twitter.com/1.1/statuses/user_timeline.json"; /*creation de l'adresse HTTP*/
 
                       $requestMethod = "GET";
 
@@ -90,13 +99,9 @@
                             }
       /*---------tweet _du "vomis"-----------------------------*/
                           $textvomis2=implode(" ",$textvomis);
-                          require_once('TwitterAPIExchange.php');
-                          /*authentification du compte tweeter=   token */
-                          $settings = array('oauth_access_token'=>'3238659609-6X9uGUkxpYhmqQSQqqix4Ewc2uTPdD9nskI45F8',
-                          'oauth_access_token_secret'=>'QEY4nk2YMueFDACd5nVZiqGkdT8HI5LiW4dKHoi7ZiYth',
-                          'consumer_key'=>'w3S89uW36ocTHuxTG7nfCjoVK',
-                          'consumer_secret'=>'fHcG0TZCbF8KRPl7uhyKi1lVhJxQnGm3tc3C2XcXgCVOsjbgjJ');
-                          /*construction URL pour envoi de tweet*/
+
+                          $settings=Authenti();
+
                           $url = "https://api.twitter.com/1.1/statuses/update.json";
                           $requestMethod = "POST";
                           $postfields = ["status"=>"$textvomis2"]; /*Ecrire un tweet*/
@@ -118,12 +123,9 @@
   /*--------post des tweet----------------------------------------------------------------------*/
             if (isset($_POST["tweet"])){
             $text=$_POST["tweet"];
-            require_once('TwitterAPIExchange.php');
-            /*authentification du compte tweeter=   token */
-            $settings = array('oauth_access_token'=>'3238659609-6X9uGUkxpYhmqQSQqqix4Ewc2uTPdD9nskI45F8',
-            'oauth_access_token_secret'=>'QEY4nk2YMueFDACd5nVZiqGkdT8HI5LiW4dKHoi7ZiYth',
-            'consumer_key'=>'w3S89uW36ocTHuxTG7nfCjoVK',
-            'consumer_secret'=>'fHcG0TZCbF8KRPl7uhyKi1lVhJxQnGm3tc3C2XcXgCVOsjbgjJ');
+
+            $settings=Authenti();
+
             /*construction URL pour envoi de tweet*/
             $url = "https://api.twitter.com/1.1/statuses/update.json";
             $requestMethod = "POST";
@@ -156,6 +158,9 @@
 
         ?>
   </div>
+
+<!--partie du code en JS pour la gestion de l'affichage------------------------------------------------------------------->
+
         <script>
 /*--------Gestion de la taille du Tamago--JS-------------------------------------------------------------------*/
         var taille = <?php echo json_encode($taille); ?>;
@@ -185,11 +190,13 @@
         if (nbtweet ==5){
         modal.style.display = "block";
         <?php
-        $message="Tu tweet trop";
+        $message="Tu tweet trop";                             /*envoi d'un mail*/
         mail('bouchet.hp@gmail.com', 'Alert Tweet',$message); ?>;
         }
         if (nbtweet==7){
           myImg.src ="images/tama_explosion.gif";
+          document.getElementById("bouton").value= "RETRY";
+          document.getElementById("bouton").classList.add("retry");
         }
 
       // When the user clicks on <span> (x), close the modal

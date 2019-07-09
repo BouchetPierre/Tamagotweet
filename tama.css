@@ -7,11 +7,13 @@ body {
 h1 {
   font-family:  'Bungee Inline', cursive;
   font-size: 100px;
+  margin-top: -20px;
 }
 /*----------end h1------------------------*/
 .envoiForm{
   display: flex;
   justify-content: center;
+  margin-top: -50px;
 }
 .envoiText{
   width: 300px;
@@ -55,7 +57,7 @@ h1 {
   vertical-align: middle;
   margin-left: 40%;
   margin-top: 500px;
-
+  color: white;
 }
 
 /* Modal Content/Box */
@@ -89,4 +91,22 @@ span:hover,
 }
 .vomis{
   text-align: center;
+}
+#sky{
+  margin-top: -50px;
+
+}
+.retry{
+  width:85px;
+	height:85px;
+	background:#9932CC;
+	box-shadow:2px 2px 8px #00BFFF;
+	font:bold 13px Arial;
+	border-radius:50%;
+	color:white;
+  margin left: 10px;
+}
+.retry.hover{
+  background:#8A2BE2;
+  box-shadow:2px 2px 8px #00BFFF;
 }
